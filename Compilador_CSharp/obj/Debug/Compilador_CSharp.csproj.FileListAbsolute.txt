@@ -1,0 +1,39 @@
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csprojAssemblyReference.cache
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Form1.resources
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Properties.Resources.resources
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csproj.GenerateResource.cache
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csproj.CoreCompileInputs.cache
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe.config
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.pdb
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.exe
+C:\Users\erickmen\3D Objects\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.pdb
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe.config
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.pdb
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csprojAssemblyReference.cache
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Form1.resources
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Properties.Resources.resources
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csproj.GenerateResource.cache
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csproj.CoreCompileInputs.cache
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.exe
+C:\Users\Juanelo\Downloads\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.pdb
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe.config
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.pdb
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csprojAssemblyReference.cache
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Form1.resources
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Properties.Resources.resources
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csproj.GenerateResource.cache
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csproj.CoreCompileInputs.cache
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.exe
+C:\Users\Juanelo\Documents\Juanelo\Sintactico_4\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.pdb
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe.config
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.exe
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\bin\Debug\Compilador_CSharp.pdb
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csprojAssemblyReference.cache
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Form1.resources
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.Properties.Resources.resources
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.csproj.GenerateResource.cache
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.exe
+C:\mis-proyectos\Compilador_CSharp\Compilador_CSharp\obj\Debug\Compilador_CSharp.pdb
