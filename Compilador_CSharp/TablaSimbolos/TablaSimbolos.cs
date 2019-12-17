@@ -56,8 +56,7 @@ namespace Compilador_CSharp
         {
             if (nodoClaseActiva.lexema != nodo.lexema)
             {
-                if (!nodoClaseActiva.TablaSimbolosAtributos
-                    .ContainsKey(nodo.lexema))
+                if (!nodoClaseActiva.TablaSimbolosAtributos.ContainsKey(nodo.lexema))
                 {
                     nodoClaseActiva.TablaSimbolosAtributos
                         .Add(nodo.lexema, nodo);
@@ -106,9 +105,14 @@ namespace Compilador_CSharp
             if (nodoClaseActiva.lexema != nodo.lexema)
             {
                 // para verificar que no exista un nombre de atributo
-                //igual que mi metodo
+                // igual que mi metodo
 
-                if (!nodoClaseActiva.TablaSimbolosMetodos.ContainsKey(nodo.lexema))
+                if (nodoClaseActiva.TablaSimbolosMetodos.ContainsKey(nodo.lexema))
+                {
+                    // trabajar con sobrecarga de metodos
+                    return Estado.Duplicado;
+                }
+                else
                 {
                     foreach (var item in misParametros)
                     {
@@ -116,11 +120,6 @@ namespace Compilador_CSharp
                     }
                     nodoClaseActiva.TablaSimbolosMetodos.Add(nodo.lexema, nodo);
                     return Estado.Insertado;
-                }
-                else
-                {
-                    // trabajar con sobrecarga de metodos
-                    return Estado.Duplicado;
                 }
             }
             else
@@ -193,7 +192,8 @@ namespace Compilador_CSharp
         Insertado,
         Duplicado,
         DuplicadoAtributoConClase,
-        DuplicadoMetodoConClase
+        DuplicadoMetodoConClase,
+        Actualizado
     }
 
     public enum Regreso

@@ -26,6 +26,7 @@ namespace Compilador_CSharp
         }
         mensaje += "\n";
 
+        mensaje += "Atributos:\n";
         foreach (var atributo in clase.TablaSimbolosAtributos.Values)
         {
           // Atributos en la clase
@@ -37,10 +38,104 @@ namespace Compilador_CSharp
           mensaje += "\n";
             
         }
+        
+        mensaje += "Metodos:\n";
+        foreach (var metodo in clase.TablaSimbolosMetodos.Values)
+        {
+          // Atributos en la clase
+          mensaje += "\t"+metodo.miAlcance+" "+metodo.miRegreso+" "+metodo.lexema+"(";
+          foreach (var parametro in metodo.TablaSimbolosVariables.Values)
+          {
+              mensaje += parametro.miTipo+" "+parametro.lexema+", ";
+          }
+          mensaje += ")";
+          mensaje += "\n";
+        }
       }
 
 			MessageBox.Show(mensaje, "Tabla de simbolos");
 		}
+
+    public TipoDato ObtenerTipoDato(string palabra){
+      switch (palabra)
+      {
+        #region string
+        case "string":
+          return TipoDato.Cadena;
+        #endregion
+        
+        #region char
+        case "char":
+          return TipoDato.Caracter;
+        #endregion
+        
+        #region int
+        case "int":
+          return TipoDato.Entero;
+        #endregion
+        
+        #region float
+        case "float":
+          return TipoDato.Flotante;
+        #endregion
+        
+        #region double
+        case "double":
+          return TipoDato.Doble;
+        #endregion
+
+        #region bool
+        case "bool":
+          return TipoDato.Booleano;
+        #endregion
+
+        default:
+          return new TipoDato();
+      }
+    }
+
+    public Regreso ObtenerRegreso(string palabra){
+      switch (palabra)
+      {
+        #region string
+        case "string":
+          return Regreso.Cadena;
+        #endregion
+        
+        #region char
+        case "char":
+          return Regreso.Caracter;
+        #endregion
+        
+        #region int
+        case "int":
+          return Regreso.Entero;
+        #endregion
+        
+        #region float
+        case "float":
+          return Regreso.Flotante;
+        #endregion
+        
+        #region double
+        case "double":
+          return Regreso.Doble;
+        #endregion
+
+        #region bool
+        case "bool":
+          return Regreso.Booleano;
+        #endregion
+        
+        #region void
+        case "void":
+          return Regreso.Vacio;
+        #endregion
+
+        default:
+          return new Regreso();
+      }
+    }
 
     public TablaSimbolos AnalizadorSintactico()
     {
@@ -53,10 +148,9 @@ namespace Compilador_CSharp
       NodoClase clase_anterior = new NodoClase();
 
       NodoMetodo nodo_metodo = new NodoMetodo();
-
       NodoAtributo nodo_atributo = new NodoAtributo();
       NodoVariables nodo_variable = new NodoVariables();
-      List<NodoVariables> parametros;
+      List<NodoVariables> parametros = new List<NodoVariables>();
 
       //Variables para llenar nodos.
       string lexema = "";
@@ -72,15 +166,37 @@ namespace Compilador_CSharp
 					// Cadenas y caracteres simples
           if (lista[i].Lexema == "(" || lista[i].Lexema == ")")
           {
-              adentro_de_parentesis = !adentro_de_parentesis;
+            adentro_de_parentesis = !adentro_de_parentesis;
           }
 
           if (lista[i].DescripcionToken == "Cadena" && !adentro_de_parentesis)
           {
             if (lista[i+1].Lexema == "(")
             {
-              // Metodo
+              // Metodos y Parametros
               lexema = lista[i].Lexema;
+              // for (int indice_param = i+2; lista[indice_param].Lexema != ")"; indice_param++)
+              // {
+              //   if (lista[indice_param].DescripcionToken == "Reservada")
+              //   {
+              //     nodo_variable.miTipo = ObtenerTipoDato(lista[indice_param].Lexema);  
+              //   }
+              //   if (lista[indice_param].DescripcionToken == "Cadena")
+              //   {
+              //     nodo_variable.lexema = lista[indice_param].Lexema;
+              //     nodo_variable.miAlcance = Alcance.publico;
+              //     nodo_variable.tipoVariable = TipoVariable.Parametro;
+
+              //     parametros.Add(nodo_variable);
+              //     nodo_variable = new NodoVariables();
+              //   }
+              // }
+              nodo_metodo.lexema = lexema;
+              nodo_metodo.miAlcance = alcance;
+              nodo_metodo.miRegreso = regreso;
+
+              tabla_simbolos.InsertarNodoMetodo(nodo_metodo, parametros, clase_anterior);
+              nodo_metodo = new NodoMetodo();
             }
             else if (lista[i+1].Lexema == "=" || lista[i+1].Lexema == ";")
             {
@@ -89,11 +205,6 @@ namespace Compilador_CSharp
               nodo_atributo.lexema = lexema;
               nodo_atributo.miAlcance = alcance;
               nodo_atributo.miTipo = tipo_dato;
-
-              if (lista[i+1].Lexema == "=")
-              {
-                  nodo_atributo.valor = lista[i+2].Lexema;
-              }
 
               tabla_simbolos.InsertarNodoAtributo(nodo_atributo, clase_anterior);
               nodo_atributo = new NodoAtributo();
@@ -118,77 +229,22 @@ namespace Compilador_CSharp
 							break;
 					}
           
-          switch (lista[i].Lexema)
+          tipo_dato = ObtenerTipoDato(lista[i].Lexema);
+          regreso = ObtenerRegreso(lista[i].Lexema);
+
+          if (lista[i].Lexema == "class")
           {
-            #region string
-            case "string":
-              regreso = Regreso.Cadena;
-              tipo_dato = TipoDato.Cadena;
-              break;
-            #endregion
-            
-            #region char
-            case "char":
-              regreso = Regreso.Caracter;
-              tipo_dato = TipoDato.Caracter;
-              break;
-            #endregion
-            
-            #region int
-            case "int":
-              regreso = Regreso.Entero;
-              tipo_dato = TipoDato.Entero;
-              break;
-            #endregion
-            
-            #region float
-            case "float":
-              regreso = Regreso.Flotante;
-              tipo_dato = TipoDato.Flotante;
-              break;
-            #endregion
-            
-            #region double
-            case "double":
-              regreso = Regreso.Doble;
-              tipo_dato = TipoDato.Doble;
-              break;
-            #endregion
+            lexema = lista[i+1].Lexema;
+            nodo_clase.lexema = lexema;
+            nodo_clase.miAlcance = alcance;
 
-            #region bool
-            case "bool":
-              regreso = Regreso.Booleano;
-              tipo_dato = TipoDato.Booleano;
-              break;
-            #endregion
-            
-            #region void
-            case "void":
-              regreso = Regreso.Vacio;
-              tipo_dato = new TipoDato();
-              break;
-            #endregion
-            
-            #region class
-            case "class":
-              nodo_clase.miAlcance = alcance;
-
-              lexema = lista[i+1].Lexema;
-              nodo_clase.lexema = lexema;
-
-              if (i+2 < lista.Count && lista[i+2].Lexema == ":")
-              {
-                  nodo_clase.herencia = tabla_simbolos.ObtenerNodoClase(lista[i+3].Lexema);
-              }
-              tabla_simbolos.InsertarNodoClase(nodo_clase);
-              clase_anterior = nodo_clase;
-              nodo_clase = new NodoClase();
-              break;
-            #endregion
-            
-            default:
-              //Metodos y atributos
-              break;
+            if (i+2 < lista.Count && lista[i+2].Lexema == ":")
+            {
+              nodo_clase.herencia = tabla_simbolos.ObtenerNodoClase(lista[i+3].Lexema);
+            }
+            tabla_simbolos.InsertarNodoClase(nodo_clase);
+            clase_anterior = nodo_clase;
+            nodo_clase = new NodoClase();
           }
 
           columna = lista[i].Token - 148;
@@ -229,7 +285,7 @@ namespace Compilador_CSharp
       int[,] matrizTErrores = new int[,]
       {
           //    0     1      2      3      4      5      6      7      8      9     10      11    12      13     14     15     16     17     18     19     20     21     22    23      24     25     26     27     28     29     30    31      32     33     34     35     36     37     38     39     40     41     42     43     44     45     46     47    48     49      50        51           52           53            54          55          56             57           58            59         60           61             62           63           64           65        66             67          68         69            70            71          72           73           74          75           76            77          78          79               80       81           82              83           84        85           86            87       88         89           90           91             92            93              94        95             96            97          98            99        100           101         102           103         104          105            106            107          108          109         110          111          112         113            114        115           116           117         118          119          120         121           122          123         124           125           126         127           128           129          130          131
-          //          CD     NE     ND     {      }      [      ]      (      )      :      ;      ,      .      '      "      \\     =      ==     !      !=     +      ++     +=     -      --     -=     |      |=     ||     &      &=     &&     &^     &^=    <      <=     <<     <<=    ^      ^=     *      *=     /      /=     //     %      %=     >      >=     >>    >>=    /**/ abstract          as          base         bool         break        byte         case         catch        char         checked      class        const        continue     decimal      default      delegate      do       double         else          enum       event        explicit     extern       finally      fixed        float         for       foreach           goto      if         implicit          in          int      interface    internal        is      lock       long      namespace       new           null         object         operator      out          override     params       private      protected  public        readonly      ref          return      sbyte        sealed         short         sizeof       stackalloc    static     string        struct       switch       this          throw       try          typeof        uint        ulong        unchecked    unsafe       ushort       using        virtual      void         while        true         false        Console      WriteLine      'char'      "String"
+          //          CD     NE     ND     {      }      [      ]      (      )      :      ;      ,      .      '      "      \\     =      ==     !      !=     +      ++     +=     -      --     -=     |      |=     ||     &      &=     &&     &^     &^=    <      <=     <<     <<=    ^      ^=     *      *=     /      /=     //     %      %=     >      >=     >>    >>=    /**/ abstract          as          base         bool         break        byte         case         catch        char         checked      class        const        continue     decimal      default      delegate      do       double         else          enum       event        explicit     extern       finally      fixed        float         for       foreach           goto      if         implicit          in          int      interface    internal        is      lock       long      namespace       new           null         object         operator      out          override     params       private      protected  public        readonly      ref          return      sbyte        sealed         short         sizeof       stackalloc    static     string        struct       switch       this          throw       try          typeof        uint        ulong        unchecked    unsafe       ushort       using        virtual      void         while        lista[i].DescripcionToken == "Reservada"         false        Console      WriteLine      'char'      "String"
           #region clases
           /*E0*/ {0,   0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,         0,           0,          0,            0,           0,           0,           0,           0,            0,          0,           0,             0,          0,           0,            0,       0,              0,         0,          0,           0,             0,         0,            0,          0,           0,          0,             0,          0,          0,              0,        0,           0,              0,          0,         0,            0,          0,        0,        0,            0,          0,            0,            0,               0,         0,            0,            0,           0,           0,         0,            0,          0,            0,          0,           0,             0,             0,           0,           0,           0,          0,           0,          0,             0,          0,           0,            0,          0,            0,          0,            0,          0,           0,           0,           0,            0,            0,         0,            0,            0,            0},
           /*E1*/ {0,   0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,     0,         0,           2,          0,            0,           0,           0,           0,           0,            0,          0,           0,             3,          0,           0,            0,       0,              0,         0,          0,           0,             0,         0,            0,          0,           0,          0,             0,          0,          0,              0,        0,           0,              0,          0,         0,            0,          0,        0,        0,            0,          0,            0,            0,               0,         0,            0,            0,           2,           0,         2,            0,          0,            0,          0,           0,             0,             0,           0,           0,           0,          0,           0,          0,             0,          0,           0,            0,          0,            0,          0,            0,          0,           0,           0,           0,            0,            0,         0,            0,            0,            0},
