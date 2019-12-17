@@ -151,14 +151,6 @@ namespace Compilador_CSharp
 
         #endregion
 
-        #region Metodos TS Variables
-
-        public void InsertarNodoVariable(NodoVariables nv, NodoMetodo nm){
-            
-        }
-
-        #endregion
-
     }
 
     public class NodoClase

@@ -53,17 +53,16 @@ namespace Compilador_CSharp
       NodoClase clase_anterior = new NodoClase();
 
       NodoMetodo nodo_metodo = new NodoMetodo();
-      NodoMetodo metodo_anterior = new NodoMetodo();
 
       NodoAtributo nodo_atributo = new NodoAtributo();
       NodoVariables nodo_variable = new NodoVariables();
+      List<NodoVariables> parametros;
 
       //Variables para llenar nodos.
       string lexema = "";
       Alcance alcance = Alcance.publico;
 			Regreso regreso = new Regreso();
 			TipoDato tipo_dato = new TipoDato();
-			string valor = "";
       bool adentro_de_parentesis = false;
 
       for (int i = 0; i < lista.Count; i++)
@@ -74,7 +73,6 @@ namespace Compilador_CSharp
           if (lista[i].Lexema == "(" || lista[i].Lexema == ")")
           {
               adentro_de_parentesis = !adentro_de_parentesis;
-              // continue;
           }
 
           if (lista[i].DescripcionToken == "Cadena" && !adentro_de_parentesis)
