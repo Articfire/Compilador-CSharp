@@ -138,6 +138,17 @@ namespace Compilador_CSharp
             return nodoVariables.Values.ToList();
         }
 
+        public NodoMetodo ObtenerNodoMetodo(string lexema, NodoClase nodoClaseActiva)
+        {
+            if (nodoClaseActiva.TablaSimbolosMetodos
+                .ContainsKey(lexema))
+                return nodoClaseActiva
+                    .TablaSimbolosMetodos
+                    .SingleOrDefault(x => x.Key.ToString() == lexema).Value;
+            else
+                throw new Exception("Nodo metodo no encontrado");
+        }
+
         #endregion
 
         #region Metodos TS Variables
@@ -201,6 +212,7 @@ namespace Compilador_CSharp
         Cadena,
         Caracter,
         Doble,
+        Booleano
     }
 
     public enum TipoDato
@@ -210,6 +222,7 @@ namespace Compilador_CSharp
         Flotante,
         Caracter,
         Doble,
+        Booleano,
     }
     
     public enum Alcance

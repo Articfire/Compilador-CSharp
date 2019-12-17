@@ -48,24 +48,60 @@ namespace Compilador_CSharp
       int columna = 0;
       int estado = 103, estadoAnterior=0;
 
-			//Nodos para insertar a la tabla de simbolos
+			//Nodos para insertar a la tabla de simbolos.
       NodoClase nodo_clase = new NodoClase();
-      NodoAtributo nodo_atributo = new NodoAtributo();
-      NodoMetodo nodo_metodo = new NodoMetodo();
+      NodoClase clase_anterior = new NodoClase();
 
-      //Variables para insercion a la tabla de simbolos
+      NodoMetodo nodo_metodo = new NodoMetodo();
+      NodoMetodo metodo_anterior = new NodoMetodo();
+
+      NodoAtributo nodo_atributo = new NodoAtributo();
+      NodoVariables nodo_variable = new NodoVariables();
+
+      //Variables para llenar nodos.
       string lexema = "";
-      string lexema_clase = "";
       Alcance alcance = Alcance.publico;
 			Regreso regreso = new Regreso();
 			TipoDato tipo_dato = new TipoDato();
 			string valor = "";
+      bool adentro_de_parentesis = false;
 
       for (int i = 0; i < lista.Count; i++)
       {
         if ((lista[i].Token >= 100) && (lista[i].Token <= 152))
         {
 					// Cadenas y caracteres simples
+          if (lista[i].Lexema == "(" || lista[i].Lexema == ")")
+          {
+              adentro_de_parentesis = !adentro_de_parentesis;
+              // continue;
+          }
+
+          if (lista[i].DescripcionToken == "Cadena" && !adentro_de_parentesis)
+          {
+            if (lista[i+1].Lexema == "(")
+            {
+              // Metodo
+              lexema = lista[i].Lexema;
+            }
+            else if (lista[i+1].Lexema == "=" || lista[i+1].Lexema == ";")
+            {
+              // Atributo
+              lexema = lista[i].Lexema;
+              nodo_atributo.lexema = lexema;
+              nodo_atributo.miAlcance = alcance;
+              nodo_atributo.miTipo = tipo_dato;
+
+              if (lista[i+1].Lexema == "=")
+              {
+                  nodo_atributo.valor = lista[i+2].Lexema;
+              }
+
+              tabla_simbolos.InsertarNodoAtributo(nodo_atributo, clase_anterior);
+              nodo_atributo = new NodoAtributo();
+            }
+          }
+
 					columna = lista[i].Token - 99;
 				}
 
@@ -84,78 +120,77 @@ namespace Compilador_CSharp
 							break;
 					}
           
-          if (i >= 2)
+          switch (lista[i].Lexema)
           {
-            switch (lista[i].Lexema)
-            {
-              #region string
-              case "string":
-                regreso = Regreso.Cadena;
-                tipo_dato = TipoDato.Cadena;
-                break;
-              #endregion
-              
-              #region char
-              case "char":
-                regreso = Regreso.Caracter;
-                tipo_dato = TipoDato.Caracter;
-                break;
-              #endregion
-              
-              #region int
-              case "int":
-                regreso = Regreso.Entero;
-                tipo_dato = TipoDato.Entero;
-                break;
-              #endregion
-              
-              #region float
-              case "float":
-                regreso = Regreso.Flotante;
-                tipo_dato = TipoDato.Flotante;
-                break;
-              #endregion
-              
-              #region double
-              case "double":
-                regreso = Regreso.Doble;
-                tipo_dato = TipoDato.Doble;
-                break;
-              #endregion
-              
-              #region void
-              case "void":
-                regreso = Regreso.Vacio;
-                tipo_dato = new TipoDato();
-                break;
-              #endregion
-              
-              #region class
-              case "class":
-                nodo_clase.miAlcance = alcance;
-
-                lexema_clase = lista[i+1].Lexema;
-                nodo_clase.lexema = lexema_clase;
-
-                if (i+2 < lista.Count && lista[i+2].Lexema == ":")
-                {
-                    nodo_clase.herencia = tabla_simbolos.ObtenerNodoClase(lista[i+3].Lexema);
-                }
-                tabla_simbolos.InsertarNodoClase(nodo_clase);
-                nodo_clase = new NodoClase();
-                break;
-              #endregion
-              
-              default:
-                //Metodos y atributos
-                break;
-            }
+            #region string
+            case "string":
+              regreso = Regreso.Cadena;
+              tipo_dato = TipoDato.Cadena;
+              break;
+            #endregion
             
-            if (lista[i].Lexema == "string" || lista[i].Lexema == "char" || lista[i].Lexema == "int" || lista[i].Lexema == "float" || lista[i].Lexema == "double" || lista[i].Lexema == "void")
-            {
-              // Insertar Atributos o Metodos
+            #region char
+            case "char":
+              regreso = Regreso.Caracter;
+              tipo_dato = TipoDato.Caracter;
+              break;
+            #endregion
+            
+            #region int
+            case "int":
+              regreso = Regreso.Entero;
+              tipo_dato = TipoDato.Entero;
+              break;
+            #endregion
+            
+            #region float
+            case "float":
+              regreso = Regreso.Flotante;
+              tipo_dato = TipoDato.Flotante;
+              break;
+            #endregion
+            
+            #region double
+            case "double":
+              regreso = Regreso.Doble;
+              tipo_dato = TipoDato.Doble;
+              break;
+            #endregion
+
+            #region bool
+            case "bool":
+              regreso = Regreso.Booleano;
+              tipo_dato = TipoDato.Booleano;
+              break;
+            #endregion
+            
+            #region void
+            case "void":
+              regreso = Regreso.Vacio;
+              tipo_dato = new TipoDato();
+              break;
+            #endregion
+            
+            #region class
+            case "class":
+              nodo_clase.miAlcance = alcance;
+
               lexema = lista[i+1].Lexema;
-            }
+              nodo_clase.lexema = lexema;
+
+              if (i+2 < lista.Count && lista[i+2].Lexema == ":")
+              {
+                  nodo_clase.herencia = tabla_simbolos.ObtenerNodoClase(lista[i+3].Lexema);
+              }
+              tabla_simbolos.InsertarNodoClase(nodo_clase);
+              clase_anterior = nodo_clase;
+              nodo_clase = new NodoClase();
+              break;
+            #endregion
+            
+            default:
+              //Metodos y atributos
+              break;
           }
 
           columna = lista[i].Token - 148;
@@ -164,12 +199,14 @@ namespace Compilador_CSharp
         else if(lista[i].Token == 496)
         {
           // Char
+          lexema = lista[i].Lexema;
           columna = 130;
         }
 
         else if (lista[i].Token == 497)
         {
           // String
+          lexema = lista[i].Lexema;
           columna = 131;
         }
 
@@ -178,7 +215,6 @@ namespace Compilador_CSharp
 
         if (estado == 0)
         {
-
           MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: " + Errores[estadoAnterior], "Error!");
           break;
         }
