@@ -161,9 +161,9 @@ namespace Compilador_CSharp
 
       for (int i = 0; i < lista.Count; i++)
       {
+        // Cadenas y caracteres simples
         if ((lista[i].Token >= 100) && (lista[i].Token <= 152))
         {
-					// Cadenas y caracteres simples
           if (lista[i].Lexema == "(" || lista[i].Lexema == ")")
           {
             adentro_de_parentesis = !adentro_de_parentesis;
@@ -214,9 +214,9 @@ namespace Compilador_CSharp
 					columna = lista[i].Token - 99;
 				}
 
+        //Palabras reservadas
         else if ((lista[i].Token >= 200) && (lista[i].Token <= 277))
         {
-					//Palabras reservadas
 					switch (lista[i].Lexema)
 					{
             //Alcance
@@ -250,16 +250,16 @@ namespace Compilador_CSharp
           columna = lista[i].Token - 148;
         }
 
+        // Char
         else if(lista[i].Token == 496)
         {
-          // Char
           lexema = lista[i].Lexema;
           columna = 130;
         }
 
+        // String
         else if (lista[i].Token == 497)
         {
-          // String
           lexema = lista[i].Lexema;
           columna = 131;
         }
