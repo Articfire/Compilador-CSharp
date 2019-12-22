@@ -40,14 +40,14 @@
             this.tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tabla.Location = new System.Drawing.Point(553, 12);
             this.tabla.Name = "tabla";
-            this.tabla.Size = new System.Drawing.Size(451, 476);
+            this.tabla.Size = new System.Drawing.Size(451, 451);
             this.tabla.TabIndex = 5;
             // 
             // compilar_btn
             // 
-            this.compilar_btn.Location = new System.Drawing.Point(553, 494);
+            this.compilar_btn.Location = new System.Drawing.Point(553, 469);
             this.compilar_btn.Name = "compilar_btn";
-            this.compilar_btn.Size = new System.Drawing.Size(451, 23);
+            this.compilar_btn.Size = new System.Drawing.Size(451, 48);
             this.compilar_btn.TabIndex = 4;
             this.compilar_btn.Text = "Compilar";
             this.compilar_btn.UseVisualStyleBackColor = true;

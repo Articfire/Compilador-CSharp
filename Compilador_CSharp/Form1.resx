@@ -119,42 +119,32 @@
   </resheader>
   <data name="codigoTexto_txb.Text" xml:space="preserve">
     <value>namespace Martin{
-public class Primera {
+public class ClaseUno {
+  int x;
+  float y = 2.5;
+  string Nombre = "Martin";
+  string Apellido = "Hurtado";
+  bool estaVivo = true;
+  
+  public void metodo(int x, int y) {
+    string Cadena1;
+    string Cadena2;
+    string Cadena3;
+   int x;
 
-public void hole ( ) {}
-private int hola ( ) { return x ;}
-public int x;
-abstract double e ( string erick , double hola ) {return true ;}
-public void hola ( string erick) {}
-public void hola ( string erick , double hola  ) {}
+  }
+  public void metodo(int x) {
+    float Precio = 2.5;
+    double Precio2 = 5.505 * x * 2.0 / 3.0 - 400.0;
+  }
+  public void metodo() {
+    float Altura;
+    float Peso;
+    string Nombre;
+  }
 }
 
-public class Segunda : Primera {
-if(x&lt;11){ }else{ }
-for ( i; i&lt;=10;i++){}
-for (int i=10;i&lt;11;1++){}
-for (double  i=10.2;i&lt;11;1++){}
-do{}while(x&lt;11);
-do{}while(true);
-while(true){}
-while(x&lt;11){ }
-metodo();
-bool erickmen;
-bool erickmen=false;
-bool erickmen=true;
-int num;
-int num=1;
-float y=12.4;
-double p=1.1;
-char erickmen='e';
-char x;
-string cadena;
-string cadena="erickmen";
-x=10;
-x='c';
-x=12.5;
-x=5+5+5+5+5+5+5;
-y=5*2+10-2;
+public class ClaseDos : ClaseUno {
 }</value>
   </data>
 </root>

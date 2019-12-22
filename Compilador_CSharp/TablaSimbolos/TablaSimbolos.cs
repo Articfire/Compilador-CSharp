@@ -33,7 +33,7 @@ namespace Compilador_CSharp
                 throw new Exception("Error Semantico: No existe el nombre de la Clase");
         }
 
-        public bool ExisteClaseHeredada(string lexema)
+        public bool ExisteClase(string lexema)
         {
             if (tablaSimbolosClase.ContainsKey(lexema))
             {
@@ -42,8 +42,7 @@ namespace Compilador_CSharp
             else
             {
                 return false;
-                throw
-                    new Exception("error semantico 3245: no existe la clase a heredar ");
+                throw new Exception("error semantico 3245: no existe la clase a heredar ");
             }
 
         }
@@ -97,6 +96,17 @@ namespace Compilador_CSharp
                 throw new Exception("Nodo atributo no encontrado");
         }
 
+        public bool ExisteAtributo(string lexema, NodoClase nodoClaseActiva) {
+            var atributos = nodoClaseActiva.TablaSimbolosAtributos;
+            foreach (var atributo in atributos.Values)
+            {
+                if (atributo.lexema == lexema)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
 
         #region METODOS TS METODOS
@@ -107,20 +117,22 @@ namespace Compilador_CSharp
                 // para verificar que no exista un nombre de atributo
                 // igual que mi metodo
 
-                if (nodoClaseActiva.TablaSimbolosMetodos.ContainsKey(nodo.lexema))
+                foreach (var metodo in nodoClaseActiva.TablaSimbolosMetodos)
                 {
-                    // trabajar con sobrecarga de metodos
-                    return Estado.Duplicado;
-                }
-                else
-                {
-                    foreach (var item in misParametros)
+                    if (metodo.lexema == nodo.lexema)
                     {
-                        nodo.TablaSimbolosVariables.Add(item.lexema, item);
+                        return Estado.Duplicado;
                     }
-                    nodoClaseActiva.TablaSimbolosMetodos.Add(nodo.lexema, nodo);
-                    return Estado.Insertado;
                 }
+                foreach (var parametro in misParametros)
+                {
+                    // nodo.TablaSimbolosVariables.Add(parametro.lexema, parametro);
+                    nodo.TablaSimbolosVariables.Add(parametro.lexema, parametro);
+                }
+                nodoClaseActiva.TablaSimbolosMetodos.Add(nodo);
+                return Estado.Insertado;
+
+                
             }
             else
             {
@@ -130,24 +142,36 @@ namespace Compilador_CSharp
 
         public List<NodoVariables> ObtenerParametrosMetodo(string lexema, NodoClase nodoClaseActiva)
         {
-            var nodo =
-                nodoClaseActiva.TablaSimbolosMetodos.FirstOrDefault
-                    (x => x.Key.ToString() == lexema);
-            var nodoVariables = nodo.Value.TablaSimbolosVariables;
+            var nodo = ObtenerNodoMetodo(lexema, nodoClaseActiva);
+            var nodoVariables = nodo.TablaSimbolosVariables;
+            // return nodoVariables.Values.ToList();
             return nodoVariables.Values.ToList();
         }
 
         public NodoMetodo ObtenerNodoMetodo(string lexema, NodoClase nodoClaseActiva)
         {
-            if (nodoClaseActiva.TablaSimbolosMetodos
-                .ContainsKey(lexema))
-                return nodoClaseActiva
-                    .TablaSimbolosMetodos
-                    .SingleOrDefault(x => x.Key.ToString() == lexema).Value;
-            else
-                throw new Exception("Nodo metodo no encontrado");
+            foreach (var metodo in nodoClaseActiva.TablaSimbolosMetodos)
+            {
+                if (metodo.lexema == lexema && metodo.TablaSimbolosVariables.Values.ToList() == ObtenerParametrosMetodo(lexema, nodoClaseActiva))
+                {
+                    return metodo;
+                }
+            }
+            throw new Exception("Nodo metodo no encontrado");
         }
 
+        public bool ExisteMetodo(string lexema, List<NodoVariables> misParametros, NodoClase nodoClaseActiva) {
+            var metodos = nodoClaseActiva.TablaSimbolosMetodos;
+            foreach (var metodo in metodos)
+            {
+                if (metodo.lexema == lexema && metodo.TablaSimbolosVariables.Values.ToList().Equals(misParametros))
+                {
+                    return true;
+                }
+            }
+            return false;
+        
+        }
         #endregion
 
     }
@@ -158,7 +182,8 @@ namespace Compilador_CSharp
         public Alcance miAlcance;
         public NodoClase herencia;
         public Dictionary<object, NodoAtributo> TablaSimbolosAtributos = new Dictionary<object, NodoAtributo>();
-        public Dictionary<object, NodoMetodo> TablaSimbolosMetodos = new Dictionary<object, NodoMetodo>();
+        // public Dictionary<object, NodoMetodo> TablaSimbolosMetodos = new Dictionary<object, NodoMetodo>();
+        public List<NodoMetodo> TablaSimbolosMetodos = new List<NodoMetodo>();
     }
 
     public class NodoAtributo
@@ -176,6 +201,9 @@ namespace Compilador_CSharp
         public Alcance miAlcance;
         public Regreso miRegreso;
         public Dictionary<object, NodoVariables> TablaSimbolosVariables = new Dictionary<object, NodoVariables>();
+    }
+
+    public class NodoSobrecarga {
     }
 
     public class NodoVariables
