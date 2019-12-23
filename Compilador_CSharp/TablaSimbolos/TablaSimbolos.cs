@@ -203,9 +203,6 @@ namespace Compilador_CSharp
         public Dictionary<object, NodoVariables> TablaSimbolosVariables = new Dictionary<object, NodoVariables>();
     }
 
-    public class NodoSobrecarga {
-    }
-
     public class NodoVariables
     {
         public Alcance miAlcance;

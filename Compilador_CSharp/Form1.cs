@@ -23,12 +23,15 @@ namespace Compilador_CSharp
         private void Compilar_btn_Click(object sender, EventArgs e)
         {
             String codigoFuente = codigoTexto_txb.Text;
+            List<ListaToken> tokens;
 
-            Lexico Obj = new Lexico(codigoFuente);
-            tabla.DataSource = Obj.AnalisisLexico();
+            Lexico lexico = new Lexico(codigoFuente);
+            tokens = lexico.AnalisisLexico();
+            tabla.DataSource = tokens;
 
-            Sintactico AL = new Sintactico(Obj.AnalisisLexico());
-            TablaSimbolos tabla_simbolos = AL.AnalizadorSintactico();
+            Sintactico sintactico = new Sintactico(tokens);
+            TablaSimbolos tabla_simbolos = sintactico.AnalizadorSintactico();
+
         }
     }
 }
