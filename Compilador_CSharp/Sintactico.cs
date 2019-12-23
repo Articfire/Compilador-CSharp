@@ -15,8 +15,6 @@ namespace Compilador_CSharp
     }
 		
 		public void ImprimirTablaSimbolos(TablaSimbolos ts){
-			MessageBox.Show("Sin errores.", "Aviso");
-			
       string mensaje = "";
       foreach (var clase in ts.tablaSimbolosClase.Values){
         // Clases en la tabla de simbolos
@@ -199,30 +197,12 @@ namespace Compilador_CSharp
           {
             lexema = lista[i].Lexema;
 
-
             // Metodos y Parametros
             // Nota: en el segundo if, crear una zona donde se agreguen
             // variables locales al metodo anterior.
             if (lista[i+1].Lexema == "(")
             {
 
-              for (int indice_param = i+1; lista[indice_param].Lexema != ")"; indice_param++)
-              {
-                if (lista[indice_param].DescripcionToken == "Reservada")
-                {
-                  nodo_variable.miTipo = ObtenerTipoDato(lista[indice_param].Lexema);
-                }
-                if (lista[indice_param].DescripcionToken == "Cadena")
-                {
-                  nodo_variable.lexema = lista[indice_param].Lexema;
-                  nodo_variable.miAlcance = Alcance.publico;
-                  nodo_variable.tipoVariable = TipoVariable.Parametro;
-
-                  parametros.Add(nodo_variable);
-                  nodo_variable = new NodoVariables();
-                }
-              }
-              
               if (lexema == clase_anterior.lexema)
               {
                 // El metodo se llama igual que la clase en la que esta.
@@ -230,42 +210,87 @@ namespace Compilador_CSharp
               }
               else if (tabla_simbolos.ExisteMetodo(lexema, parametros, clase_anterior))
               {
-              	// Ya existe un metodo igual.
+                // Ya existe un metodo igual.
                 MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un metodo igual", "Error!");
               }
+							else if (tabla_simbolos.ExisteAtributo(lexema, clase_anterior) && ambito == 2) {
+								// Ya existe un atributo que se llama igual.
+                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un atributo que se llama igual", "Error!");
+							}
               else
               {
+								for (int indice_param = i+1; lista[indice_param].Lexema != ")"; indice_param++)
+								{
+									if (lista[indice_param].DescripcionToken == "Reservada")
+									{
+										nodo_variable.miTipo = ObtenerTipoDato(lista[indice_param].Lexema);
+									}
+									if (lista[indice_param].DescripcionToken == "Cadena")
+									{
+										nodo_variable.lexema = lista[indice_param].Lexema;
+										nodo_variable.miAlcance = Alcance.publico;
+										nodo_variable.tipoVariable = TipoVariable.Parametro;
+
+										parametros.Add(nodo_variable);
+										nodo_variable = new NodoVariables();
+									}
+								}
                 nodo_metodo.lexema = lexema;
                 nodo_metodo.miAlcance = alcance;
                 nodo_metodo.miRegreso = regreso;
 
                 tabla_simbolos.InsertarNodoMetodo(nodo_metodo, parametros, clase_anterior);
+                metodo_anterior = nodo_metodo;
                 nodo_metodo = new NodoMetodo();
               }
               parametros.Clear();
             }
             
             // Atributo
-            else if (ambito == 2 && (lista[i+1].Lexema == "=" || lista[i+1].Lexema == ";"))
+            else if (lista[i+1].Lexema == "=" || lista[i+1].Lexema == ";")
             {
+              
               if (lexema == clase_anterior.lexema)
               {
                 // El atributo se llama igual que la clase en la que esta.
                 MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: El atributo se llama igual que la clase en la que esta", "Error!");
               }
-              else if (tabla_simbolos.ExisteAtributo(lexema, clase_anterior))
+              else if (tabla_simbolos.ExisteAtributo(lexema, clase_anterior) && ambito == 2)
               {
                 // Ya existe un atributo que se llama igual.
                 MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un atributo que se llama igual", "Error!");
               }
-              else
+              else if (tabla_simbolos.ExisteMetodo(lexema, clase_anterior) && ambito >= 2) {
+								// Ya existe un atributo que se llama igual.
+                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un metodo que se llama igual", "Error!");
+							}
+							else if (tabla_simbolos.ExisteVariable(lexema, metodo_anterior) && ambito == 3) {
+								// Ya existe un atributo que se llama igual.
+                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe una variable local que se llama igual", "Error!");
+							}
+							else
               {
-                nodo_atributo.lexema = lexema;
-                nodo_atributo.miAlcance = alcance;
-                nodo_atributo.miTipo = tipo_dato;
+                // para atributos
+                if (ambito == 2 && !adentro_de_parentesis)
+                {
+                  nodo_atributo.lexema = lexema;
+                  nodo_atributo.miAlcance = alcance;
+                  nodo_atributo.miTipo = tipo_dato;
 
-                tabla_simbolos.InsertarNodoAtributo(nodo_atributo, clase_anterior);
-                nodo_atributo = new NodoAtributo();
+                  tabla_simbolos.InsertarNodoAtributo(nodo_atributo, clase_anterior);
+                  nodo_atributo = new NodoAtributo();
+                }
+                // para variables locales
+                else if (ambito == 3 && !adentro_de_parentesis)
+                {
+                  nodo_variable.lexema = lexema;
+                  nodo_variable.miAlcance = alcance;
+                  nodo_variable.miTipo = tipo_dato;
+                  nodo_variable.tipoVariable = TipoVariable.VariableLocal;
+
+                  metodo_anterior.TablaSimbolosVariables.Add(nodo_variable.lexema, nodo_variable);
+                  nodo_variable = new NodoVariables();
+                }
               }
             }
           }
