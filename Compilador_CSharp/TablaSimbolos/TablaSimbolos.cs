@@ -10,7 +10,7 @@ namespace Compilador_CSharp
         public Dictionary<object, NodoClase> tablaSimbolosClase =
             new Dictionary<object, NodoClase>();
 
-        #region METODOS TS CLASE
+        #region METODOS TS Clases
         public Estado InsertarNodoClase(NodoClase miNodoClase)
         {
             if (!tablaSimbolosClase.ContainsKey(miNodoClase.lexema))
@@ -109,7 +109,7 @@ namespace Compilador_CSharp
         }
         #endregion
 
-        #region METODOS TS METODOS
+        #region METODOS TS Metodos
         public Estado InsertarNodoMetodo(NodoMetodo nodo, List<NodoVariables> misParametros, NodoClase nodoClaseActiva)
         {
             if (nodoClaseActiva.lexema != nodo.lexema)
@@ -186,6 +186,19 @@ namespace Compilador_CSharp
         }
         #endregion
 
+        #region METODOS TS Variables
+        public bool ExisteVariable(string lexema, NodoMetodo nodoMetodo) {
+            var variables = nodoMetodo.TablaSimbolosVariables;
+            foreach (var variable in variables.Values)
+            {
+                if (variable.lexema == lexema)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
     }
 
     public class NodoClase
