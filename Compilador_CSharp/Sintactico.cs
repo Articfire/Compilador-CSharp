@@ -178,20 +178,6 @@ namespace Compilador_CSharp
           {
             ambito--;
           }
-          
-          // if (lista[i].DescripcionToken == "Cadena")
-          // {
-          //   lexema = lista[i].Lexema;
-
-          //   if (!tabla_simbolos.ExisteAtributo(lexema, clase_anterior) && ambito == 2)
-          //   {
-          //     // Tirar error de que no existe tal atributo declarado en la clase
-          //   }
-          //   if (!tabla_simbolos.ExisteMetodo(lexema, clase_anterior) && ambito == 2)
-          //   {
-          //       // Tirar error de que no existe tal metodo declarado en la clase
-          //   }
-          // }
 
           if (lista[i].DescripcionToken == "Cadena" && !adentro_de_parentesis)
           {
@@ -202,23 +188,22 @@ namespace Compilador_CSharp
             // variables locales al metodo anterior.
             if (lista[i+1].Lexema == "(")
             {
-
-              if (lexema == clase_anterior.lexema)
-              {
-                // El metodo se llama igual que la clase en la que esta.
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: El metodo se llama igual que la clase en la que esta", "Error!");
-              }
-              else if (tabla_simbolos.ExisteMetodo(lexema, parametros, clase_anterior))
-              {
-                // Ya existe un metodo igual.
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un metodo igual", "Error!");
-              }
+							if (lexema == clase_anterior.lexema)
+							{
+								// El metodo se llama igual que la clase en la que esta.
+								MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: El metodo se llama igual que la clase en la que esta", "Error!");
+							}
+							else if (tabla_simbolos.ExisteMetodo(lexema, parametros, clase_anterior))
+							{
+								// Ya existe un metodo igual.
+								MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un metodo igual", "Error!");
+							}
 							else if (tabla_simbolos.ExisteAtributo(lexema, clase_anterior) && ambito == 2) {
 								// Ya existe un atributo que se llama igual.
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un atributo que se llama igual", "Error!");
+								MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un atributo que se llama igual", "Error!");
 							}
-              else
-              {
+							else
+							{
 								for (int indice_param = i+1; lista[indice_param].Lexema != ")"; indice_param++)
 								{
 									if (lista[indice_param].DescripcionToken == "Reservada")
@@ -235,15 +220,16 @@ namespace Compilador_CSharp
 										nodo_variable = new NodoVariables();
 									}
 								}
-                nodo_metodo.lexema = lexema;
-                nodo_metodo.miAlcance = alcance;
-                nodo_metodo.miRegreso = regreso;
+								nodo_metodo.lexema = lexema;
+								nodo_metodo.miAlcance = alcance;
+								nodo_metodo.miRegreso = regreso;
 
-                tabla_simbolos.InsertarNodoMetodo(nodo_metodo, parametros, clase_anterior);
-                metodo_anterior = nodo_metodo;
-                nodo_metodo = new NodoMetodo();
-              }
-              parametros.Clear();
+								tabla_simbolos.InsertarNodoMetodo(nodo_metodo, parametros, clase_anterior);
+								metodo_anterior = nodo_metodo;
+								nodo_metodo = new NodoMetodo();
+							}
+							parametros.Clear();
+
             }
             
             // Atributo
@@ -293,7 +279,14 @@ namespace Compilador_CSharp
                 }
               }
             }
-          }
+
+						// Expresiones con variables
+						else {
+							if (!tabla_simbolos.ExisteVariable(lexema, metodo_anterior) && ambito == 3) {
+                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: No existe una variable local con ese nombre", "Error!");
+							}
+						}
+					}
 
 					columna = lista[i].Token - 99;
 				}
