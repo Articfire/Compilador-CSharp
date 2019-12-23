@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabla = new System.Windows.Forms.DataGridView();
             this.compilar_btn = new System.Windows.Forms.Button();
             this.codigoTexto_txb = new System.Windows.Forms.TextBox();
@@ -63,7 +62,7 @@
             this.codigoTexto_txb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.codigoTexto_txb.Size = new System.Drawing.Size(498, 505);
             this.codigoTexto_txb.TabIndex = 3;
-            this.codigoTexto_txb.Text = resources.GetString("codigoTexto_txb.Text");
+            this.codigoTexto_txb.Text = "namespace Martin{\r\npublic class Humano {\r\n  int x;\r\n}";
             // 
             // tablaErrores
             // 
