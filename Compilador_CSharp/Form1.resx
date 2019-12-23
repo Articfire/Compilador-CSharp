@@ -117,32 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="codigoTexto_txb.Text" xml:space="preserve">
-    <value>namespace Martin{
-public class ClaseUno {
-  int x;
-  float y = 2.5;
-  string Nombre = "Martin";
-  string Apellido = "Hurtado";
-  bool estaVivo = true;
-  
-  public void metodo(int x, int y) {
-    string Cadena1;
-    string Cadena2;
-    string Cadena3;
-  }
-  public void metodo(int x) {
-    float Precio = 2.5;
-    double Precio2 = 5.505 * x * 2.0 / 3.0 - 400.0;
-  }
-  public void metodo() {
-    float Altura;
-    float Peso;
-    string Nombre;
-  }
-}
-
-public class ClaseDos : ClaseUno {
-}</value>
-  </data>
 </root>
