@@ -37,19 +37,17 @@ namespace Compilador_CSharp
               mensaje += " = "+atributo.valor;
           }
           mensaje += "\n";
-            
         }
         
         mensaje += "Metodos:\n";
         foreach (var metodo in clase.TablaSimbolosMetodos)
         {
-          // Atributos en la clase
-          mensaje += "\t"+metodo.miAlcance+" "+metodo.miRegreso+" "+metodo.lexema+"(";
-          foreach (var parametro in metodo.TablaSimbolosVariables.Values)
+          // Metodos en la clase
+          mensaje += "\t"+metodo.miAlcance+" "+metodo.miRegreso+" "+metodo.lexema+"()\n";
+          foreach (var variable in metodo.TablaSimbolosVariables.Values)
           {
-              mensaje += parametro.miTipo+" "+parametro.lexema+", ";
+              mensaje += "\t\tvariable "+variable.miTipo+" "+variable.lexema+"\n";
           }
-          mensaje += ")";
           mensaje += "\n";
         }
       }
@@ -146,20 +144,24 @@ namespace Compilador_CSharp
 
 			//Nodos para insertar a la tabla de simbolos.
       NodoClase nodo_clase = new NodoClase();
-      NodoClase clase_anterior = new NodoClase();
-
-      NodoMetodo nodo_metodo = new NodoMetodo();
       NodoAtributo nodo_atributo = new NodoAtributo();
+      NodoMetodo nodo_metodo = new NodoMetodo();
+
       NodoVariables nodo_variable = new NodoVariables();
       List<NodoVariables> parametros = new List<NodoVariables>();
 
+      NodoClase clase_anterior = new NodoClase();
+      NodoMetodo metodo_anterior = new NodoMetodo();
+      
       //Variables para llenar nodos.
       string lexema = "";
       Alcance alcance = Alcance.publico;
 			Regreso regreso = new Regreso();
 			TipoDato tipo_dato = new TipoDato();
+
+      //Variables auxiliares
       bool adentro_de_parentesis = false;
-      int ambito = 0;
+      int ambito = 0;  // Que tantas llaves ha abierto.
 
       for (int i = 0; i < lista.Count; i++)
       {
@@ -168,23 +170,41 @@ namespace Compilador_CSharp
         {
           if (lista[i].Lexema == "(" || lista[i].Lexema == ")")
           {
-              adentro_de_parentesis = !adentro_de_parentesis;
+            adentro_de_parentesis = !adentro_de_parentesis;
           }
           if (lista[i].Lexema == "{")
           {
-              ambito++;
+            ambito++;
           }
           if (lista[i].Lexema == "}")
           {
-              ambito--;
+            ambito--;
           }
           
-          if (lista[i].DescripcionToken == "Cadena" && !adentro_de_parentesis && ambito <= 2)
+          // if (lista[i].DescripcionToken == "Cadena")
+          // {
+          //   lexema = lista[i].Lexema;
+
+          //   if (!tabla_simbolos.ExisteAtributo(lexema, clase_anterior) && ambito == 2)
+          //   {
+          //     // Tirar error de que no existe tal atributo declarado en la clase
+          //   }
+          //   if (!tabla_simbolos.ExisteMetodo(lexema, clase_anterior) && ambito == 2)
+          //   {
+          //       // Tirar error de que no existe tal metodo declarado en la clase
+          //   }
+          // }
+
+          if (lista[i].DescripcionToken == "Cadena" && !adentro_de_parentesis)
           {
+            lexema = lista[i].Lexema;
+
+
+            // Metodos y Parametros
+            // Nota: en el segundo if, crear una zona donde se agreguen
+            // variables locales al metodo anterior.
             if (lista[i+1].Lexema == "(")
             {
-              // Metodos y Parametros
-              lexema = lista[i].Lexema;
 
               for (int indice_param = i+1; lista[indice_param].Lexema != ")"; indice_param++)
               {
@@ -224,10 +244,10 @@ namespace Compilador_CSharp
               }
               parametros.Clear();
             }
-            else if (lista[i+1].Lexema == "=" || lista[i+1].Lexema == ";")
+            
+            // Atributo
+            else if (ambito == 2 && (lista[i+1].Lexema == "=" || lista[i+1].Lexema == ";"))
             {
-              // Atributo
-              lexema = lista[i].Lexema;
               if (lexema == clase_anterior.lexema)
               {
                 // El atributo se llama igual que la clase en la que esta.

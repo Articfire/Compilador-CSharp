@@ -42,14 +42,14 @@
             this.tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tabla.Location = new System.Drawing.Point(516, 12);
             this.tabla.Name = "tabla";
-            this.tabla.Size = new System.Drawing.Size(488, 306);
+            this.tabla.Size = new System.Drawing.Size(456, 262);
             this.tabla.TabIndex = 5;
             // 
             // compilar_btn
             // 
             this.compilar_btn.Location = new System.Drawing.Point(516, 483);
             this.compilar_btn.Name = "compilar_btn";
-            this.compilar_btn.Size = new System.Drawing.Size(488, 34);
+            this.compilar_btn.Size = new System.Drawing.Size(456, 34);
             this.compilar_btn.TabIndex = 4;
             this.compilar_btn.Text = "Compilar";
             this.compilar_btn.UseVisualStyleBackColor = true;
@@ -68,16 +68,16 @@
             // tablaErrores
             // 
             this.tablaErrores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tablaErrores.Location = new System.Drawing.Point(516, 324);
+            this.tablaErrores.Location = new System.Drawing.Point(516, 280);
             this.tablaErrores.Name = "tablaErrores";
-            this.tablaErrores.Size = new System.Drawing.Size(488, 153);
+            this.tablaErrores.Size = new System.Drawing.Size(456, 197);
             this.tablaErrores.TabIndex = 6;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1016, 529);
+            this.ClientSize = new System.Drawing.Size(984, 529);
             this.Controls.Add(this.tablaErrores);
             this.Controls.Add(this.tabla);
             this.Controls.Add(this.compilar_btn);

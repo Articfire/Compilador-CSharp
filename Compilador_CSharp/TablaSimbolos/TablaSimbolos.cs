@@ -117,13 +117,13 @@ namespace Compilador_CSharp
                 // para verificar que no exista un nombre de atributo
                 // igual que mi metodo
 
-                foreach (var metodo in nodoClaseActiva.TablaSimbolosMetodos)
+                /*foreach (var metodo in nodoClaseActiva.TablaSimbolosMetodos)
                 {
                     if (metodo.lexema == nodo.lexema)
                     {
                         return Estado.Duplicado;
                     }
-                }
+                }*/
                 foreach (var parametro in misParametros)
                 {
                     // nodo.TablaSimbolosVariables.Add(parametro.lexema, parametro);
@@ -171,6 +171,18 @@ namespace Compilador_CSharp
             }
             return false;
         
+        }
+        
+        public bool ExisteMetodo(string lexema, NodoClase nodoClaseActiva) {
+            var metodos = nodoClaseActiva.TablaSimbolosMetodos;
+            foreach (var metodo in metodos)
+            {
+                if (metodo.lexema == lexema)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
 

@@ -130,8 +130,6 @@ public class ClaseUno {
     string Cadena1;
     string Cadena2;
     string Cadena3;
-   int x;
-
   }
   public void metodo(int x) {
     float Precio = 2.5;
