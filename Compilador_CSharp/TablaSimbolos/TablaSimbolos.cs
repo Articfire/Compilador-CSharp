@@ -10,6 +10,9 @@ namespace Compilador_CSharp
         public Dictionary<object, NodoClase> tablaSimbolosClase =
             new Dictionary<object, NodoClase>();
 
+        public List<ListaErroresSemanticos> lista_errores_semanticos =
+            new List<ListaErroresSemanticos>();
+
         #region METODOS TS Clases
         public Estado InsertarNodoClase(NodoClase miNodoClase)
         {
@@ -235,6 +238,40 @@ namespace Compilador_CSharp
         public TipoDato miTipo;
         public string valor;
         public TipoVariable tipoVariable;
+    }
+
+    public class ListaErroresSemanticos
+    {
+        string _mensaje;
+        string _numeroLinea;
+
+        public string Mensaje
+        {
+            get
+            {
+                return this._mensaje;
+            }
+            set
+            {
+                this._mensaje = value;
+            }
+        }
+        public string NumeroLinea
+        {
+            get
+            {
+                return this._numeroLinea;
+            }
+            set
+            {
+                this._numeroLinea = value;
+            }
+        }
+        public ListaErroresSemanticos(string mensaje, string numeroLinea)
+        {
+            this._mensaje = mensaje;
+            this._numeroLinea = numeroLinea;
+        }
     }
 
     public enum Estado

@@ -13,25 +13,46 @@ namespace Compilador_CSharp
     public partial class Form1 : Form
     {
 
-        TablaSimbolos tablasimbolos;
         public Form1()
         {
             InitializeComponent();
-            tablasimbolos = new TablaSimbolos();
         }
 
+        List<ListaToken> tokens = new List<ListaToken>();
+        TablaSimbolos tabla_simbolos = new TablaSimbolos();
         private void Compilar_btn_Click(object sender, EventArgs e)
         {
             String codigoFuente = codigoTexto_txb.Text;
-            List<ListaToken> tokens;
 
             Lexico lexico = new Lexico(codigoFuente);
             tokens = lexico.AnalisisLexico();
-            tabla.DataSource = tokens;
 
             Sintactico sintactico = new Sintactico(tokens);
-            TablaSimbolos tabla_simbolos = sintactico.AnalizadorSintactico();
+            tabla_simbolos = sintactico.AnalizadorSintactico();
 
+            tabla.DataSource = tokens;
+        }
+
+        private void infoSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (infoSelector.Text)
+            {
+                case "Lista de Tokens":
+					tabla.DataSource = tokens;
+                    break;
+                case "Tabla de Simbolos":
+                    break;
+                case "Errores de TS":
+                    tabla.DataSource = tabla_simbolos.lista_errores_semanticos;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void infoSelector_Click(object sender, EventArgs e)
+        {
+            infoSelector.DroppedDown = true;
         }
     }
 }
