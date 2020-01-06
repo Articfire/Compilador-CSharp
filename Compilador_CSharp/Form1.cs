@@ -30,24 +30,26 @@ namespace Compilador_CSharp
             Sintactico sintactico = new Sintactico(tokens);
             tabla_simbolos = sintactico.AnalizadorSintactico();
 
+            NodoArbol arbol = new NodoArbol(tokens, tabla_simbolos);
+            arbol.GenerarArbol();
+
+
             tabla.DataSource = tokens;
         }
 
         private void infoSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (infoSelector.Text)
-            {
-                case "Lista de Tokens":
-					tabla.DataSource = tokens;
-                    break;
-                case "Tabla de Simbolos":
-                    break;
-                case "Errores de TS":
-                    tabla.DataSource = tabla_simbolos.lista_errores_semanticos;
-                    break;
-                default:
-                    break;
-            }
+          switch (infoSelector.Text)
+          {
+            case "Lista de Tokens":
+  		           tabla.DataSource = tokens;
+                break;
+            case "Errores de TS":
+                tabla.DataSource = tabla_simbolos.lista_errores_semanticos;
+                break;
+            default:
+                break;
+          }
         }
 
         private void infoSelector_Click(object sender, EventArgs e)
@@ -56,4 +58,3 @@ namespace Compilador_CSharp
         }
     }
 }
-

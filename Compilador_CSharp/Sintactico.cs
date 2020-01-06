@@ -91,46 +91,46 @@ namespace Compilador_CSharp
       }
     }
 
-    public Regreso ObtenerRegreso(string palabra){
+    public TipoDato ObtenerRegreso(string palabra){
       switch (palabra)
       {
         #region string
         case "string":
-          return Regreso.Cadena;
+          return TipoDato.Cadena;
         #endregion
         
         #region char
         case "char":
-          return Regreso.Caracter;
+          return TipoDato.Caracter;
         #endregion
         
         #region int
         case "int":
-          return Regreso.Entero;
+          return TipoDato.Entero;
         #endregion
         
         #region float
         case "float":
-          return Regreso.Flotante;
+          return TipoDato.Flotante;
         #endregion
         
         #region double
         case "double":
-          return Regreso.Doble;
+          return TipoDato.Doble;
         #endregion
 
         #region bool
         case "bool":
-          return Regreso.Booleano;
+          return TipoDato.Booleano;
         #endregion
         
         #region void
         case "void":
-          return Regreso.Vacio;
+          return TipoDato.Vacio;
         #endregion
 
         default:
-          return new Regreso();
+          return new TipoDato();
       }
     }
 
@@ -155,7 +155,7 @@ namespace Compilador_CSharp
       //Variables para llenar nodos.
       string lexema = "";
       Alcance alcance = Alcance.publico;
-			Regreso regreso = new Regreso();
+			TipoDato regreso = new TipoDato();
 			TipoDato tipo_dato = new TipoDato();
 
       //Variables auxiliares

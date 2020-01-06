@@ -99,6 +99,18 @@ namespace Compilador_CSharp
                 throw new Exception("Nodo atributo no encontrado");
         }
 
+        public TipoDato ObtenerTipoDato(string lexema)
+        {
+            foreach (var clase in tablaSimbolosClase.Values)
+            {
+                if (ExisteAtributo(lexema, clase))
+                {
+                    return ObtenerTipoDato(lexema, clase);
+                }
+            }
+            return new TipoDato();
+        }
+
         public bool ExisteAtributo(string lexema, NodoClase nodoClaseActiva) {
             var atributos = nodoClaseActiva.TablaSimbolosAtributos;
             foreach (var atributo in atributos.Values)
@@ -227,7 +239,7 @@ namespace Compilador_CSharp
     {
         public string lexema;
         public Alcance miAlcance;
-        public Regreso miRegreso;
+        public TipoDato miRegreso;
         public Dictionary<object, NodoVariables> TablaSimbolosVariables = new Dictionary<object, NodoVariables>();
     }
 
@@ -272,49 +284,6 @@ namespace Compilador_CSharp
             this._mensaje = mensaje;
             this._numeroLinea = numeroLinea;
         }
-    }
-
-    public enum Estado
-    {
-        Insertado,
-        Duplicado,
-        DuplicadoAtributoConClase,
-        DuplicadoMetodoConClase,
-        Actualizado
-    }
-
-    public enum Regreso
-    {
-        Vacio,
-        Entero,
-        Flotante,
-        Cadena,
-        Caracter,
-        Doble,
-        Booleano
-    }
-
-    public enum TipoDato
-    {
-        Entero,
-        Cadena,
-        Flotante,
-        Caracter,
-        Doble,
-        Booleano,
-    }
-    
-    public enum Alcance
-    {
-        publico,
-        privado,
-        estatico
-    }
-    
-    public enum TipoVariable
-    {
-        VariableLocal,
-        Parametro
     }
 
 }

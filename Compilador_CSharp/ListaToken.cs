@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Compilador_CSharp
 {
-    class ListaToken
+    public class ListaToken
     {
         int _token;
         string _lexema;
