@@ -33,22 +33,24 @@ namespace Compilador_CSharp
 
     public class ArbolSintactico
     {
+        #region Propiedades del Arbol
         int puntero = 0;
         public string codigo_p = "";
         
-
+        ListaToken TokenActual;
         List<ListaToken> miListaTokens;
         TablaSimbolos miTablaSimbolos;
-        ListaToken TokenActual;
+        #endregion
         
         public static Nodo Arbol = new Nodo();
 
-        #region Metodos de Arbol
-        public void GenerarArbol(List<ListaToken> lista, TablaSimbolos tabla)
+        #region Metodos para Generar y Recorrer el Arbol
+        public Nodo GenerarArbol(List<ListaToken> lista, TablaSimbolos tabla)
         {
             miListaTokens = lista;
             miTablaSimbolos = tabla;
             Arbol = GenerarSentencias();
+            return Arbol;
         }
         
         public void ObtenerSiguienteToken()
@@ -68,7 +70,7 @@ namespace Compilador_CSharp
             {
                 if (miListaTokens[puntero].Token == 100 && miListaTokens[puntero + 1].Lexema == "=")
                 {
-                    codigo_p += "Lda " + miListaTokens[puntero].Lexema + "  \r\n";
+                    codigo_p += "lda " + miListaTokens[puntero].Lexema + "\r\n";
                     t = Asignacion();
 
                 }
@@ -85,9 +87,36 @@ namespace Compilador_CSharp
         
         public void GenerarCodigoP(string codigop)
         {
-            string ubicacion = @"";
+            string ubicacion = @"C:\Users\Marti\OneDrive\Escritorio\CodigoP.txt";
             File.WriteAllText(ubicacion, codigop);
-        }        
+        }
+
+        public void RecorridoPostOrden(Nodo miArbol)
+        {
+            if (miArbol.hijoIzquierdo != null)
+            {
+                RecorridoPostOrden(miArbol.hijoIzquierdo);
+            }
+
+            if (miArbol.hijoCentro != null)
+            {
+                RecorridoPostOrden(miArbol.hijoCentro);
+            }
+
+            if (miArbol.hijoDerecho != null)
+            {
+                RecorridoPostOrden(miArbol.hijoDerecho);
+            }
+
+            if (miArbol.lexema != null)
+            {
+                MessageBox.Show(miArbol.lexema);
+                if (miArbol.Hermano != null)
+                {
+                    RecorridoPostOrden(miArbol.Hermano);
+                }
+            }
+        }
         #endregion
 
         #region Metodos de Asignacion
@@ -100,7 +129,7 @@ namespace Compilador_CSharp
             ObtenerSiguienteToken();
             ObtenerSiguienteToken();
             t.hijoIzquierdo = SimpleExpresion();
-            codigo_p += "sto" + "\r ";
+            codigo_p += "sto" + "\r\n";
             t.Hermano = GenerarSentencias();
             return t;
         }
@@ -111,22 +140,26 @@ namespace Compilador_CSharp
             while (miListaTokens[puntero].Lexema == "+" || miListaTokens[puntero].Lexema == "-")
             {
                 Nodo p = NuevoNodoExpresion();
+                string lexema_anterior = "";
+
                 p.lexema = TokenActual.Lexema;
                 p.miTipoExpresion = tipoExpresion.Aritmetica;
                 p.hijoIzquierdo = t;
                 t = p;
+
+                lexema_anterior = miListaTokens[puntero].Lexema;
                 ObtenerSiguienteToken();
                 t.hijoDerecho = Termino();
-                if (miListaTokens[puntero].Lexema == "+")
+                if (lexema_anterior == "+")
                 {
                     t.miTipoOperacion = tipoOperacion.Suma;
                     codigo_p += "adi " + "\r\n";
                 }
-                else if (miListaTokens[puntero].Lexema == "-")
+                else if (lexema_anterior == "-")
                 {
                     t.miTipoOperacion = tipoOperacion.Resta;
                     codigo_p += "sbi " + "\r\n";
-                } 
+                }
             }
 
             return t;
@@ -138,10 +171,14 @@ namespace Compilador_CSharp
             while (miListaTokens[puntero].Lexema == "*" || miListaTokens[puntero].Lexema == "/")
             {
                 Nodo p = NuevoNodoExpresion();
+                string lexema_anterior = "";
+
                 p.lexema = TokenActual.Lexema;
                 p.miTipoExpresion = tipoExpresion.Aritmetica;
                 p.hijoIzquierdo = t;
                 t = p;
+
+                lexema_anterior = miListaTokens[puntero].Lexema;
                 ObtenerSiguienteToken();
                 t.hijoDerecho = Factor();
                 if (miListaTokens[puntero].Lexema == "*")
@@ -167,6 +204,7 @@ namespace Compilador_CSharp
                 t = NuevoNodoExpresion();
                 t.lexema = TokenActual.Lexema;
                 t.miTipoExpresion = tipoExpresion.Constante;
+                t.miTipoValor = miTablaSimbolos.ObtenerTipoDato(TokenActual.Lexema);
                 codigo_p += "lod " + TokenActual.Lexema + "\r\n";
                 ObtenerSiguienteToken();
             }
@@ -176,11 +214,11 @@ namespace Compilador_CSharp
                 t.lexema = TokenActual.Lexema;
                 t.miTipoExpresion = tipoExpresion.Constante;
                 codigo_p += "ldc " + TokenActual.Lexema + "\r\n";
-                if (TokenActual.Token == -2)
+                if (TokenActual.Token == 101)
                 {
                     t.miTipoValor = TipoDato.Entero;
                 }
-                else if (TokenActual.Token == -3)
+                else if (TokenActual.Token == 102)
                 {
                     t.miTipoValor = TipoDato.Flotante;
                 }

@@ -31,6 +31,9 @@ namespace Compilador_CSharp
             Sintactico sintactico = new Sintactico(tokens);
             tabla_simbolos = sintactico.AnalizadorSintactico();
 
+            ArbolSintactico arbol_sintactico = new ArbolSintactico();
+            Nodo nodo = arbol_sintactico.GenerarArbol(tokens, tabla_simbolos);
+            arbol_sintactico.RecorridoPostOrden(nodo);
         }
 
         private void infoSelector_SelectedIndexChanged(object sender, EventArgs e)
