@@ -10,6 +10,9 @@ namespace Compilador_CSharp
         public Dictionary<object, NodoClase> tablaSimbolosClase =
             new Dictionary<object, NodoClase>();
 
+        public List<ListaErroresSemanticos> lista_errores_semanticos =
+            new List<ListaErroresSemanticos>();
+
         #region METODOS TS Clases
         public Estado InsertarNodoClase(NodoClase miNodoClase)
         {
@@ -94,6 +97,18 @@ namespace Compilador_CSharp
                     .SingleOrDefault(x => x.Key.ToString() == lexema).Value.miTipo;
             else
                 throw new Exception("Nodo atributo no encontrado");
+        }
+
+        public TipoDato ObtenerTipoDato(string lexema)
+        {
+            foreach (var clase in tablaSimbolosClase.Values)
+            {
+                if (ExisteAtributo(lexema, clase))
+                {
+                    return ObtenerTipoDato(lexema, clase);
+                }
+            }
+            return new TipoDato();
         }
 
         public bool ExisteAtributo(string lexema, NodoClase nodoClaseActiva) {
@@ -224,7 +239,7 @@ namespace Compilador_CSharp
     {
         public string lexema;
         public Alcance miAlcance;
-        public Regreso miRegreso;
+        public TipoDato miRegreso;
         public Dictionary<object, NodoVariables> TablaSimbolosVariables = new Dictionary<object, NodoVariables>();
     }
 
@@ -237,47 +252,38 @@ namespace Compilador_CSharp
         public TipoVariable tipoVariable;
     }
 
-    public enum Estado
+    public class ListaErroresSemanticos
     {
-        Insertado,
-        Duplicado,
-        DuplicadoAtributoConClase,
-        DuplicadoMetodoConClase,
-        Actualizado
-    }
+        string _mensaje;
+        string _numeroLinea;
 
-    public enum Regreso
-    {
-        Vacio,
-        Entero,
-        Flotante,
-        Cadena,
-        Caracter,
-        Doble,
-        Booleano
-    }
-
-    public enum TipoDato
-    {
-        Entero,
-        Cadena,
-        Flotante,
-        Caracter,
-        Doble,
-        Booleano,
-    }
-    
-    public enum Alcance
-    {
-        publico,
-        privado,
-        estatico
-    }
-    
-    public enum TipoVariable
-    {
-        VariableLocal,
-        Parametro
+        public string Mensaje
+        {
+            get
+            {
+                return this._mensaje;
+            }
+            set
+            {
+                this._mensaje = value;
+            }
+        }
+        public string NumeroLinea
+        {
+            get
+            {
+                return this._numeroLinea;
+            }
+            set
+            {
+                this._numeroLinea = value;
+            }
+        }
+        public ListaErroresSemanticos(string mensaje, string numeroLinea)
+        {
+            this._mensaje = mensaje;
+            this._numeroLinea = numeroLinea;
+        }
     }
 
 }

@@ -91,46 +91,46 @@ namespace Compilador_CSharp
       }
     }
 
-    public Regreso ObtenerRegreso(string palabra){
+    public TipoDato ObtenerRegreso(string palabra){
       switch (palabra)
       {
         #region string
         case "string":
-          return Regreso.Cadena;
+          return TipoDato.Cadena;
         #endregion
         
         #region char
         case "char":
-          return Regreso.Caracter;
+          return TipoDato.Caracter;
         #endregion
         
         #region int
         case "int":
-          return Regreso.Entero;
+          return TipoDato.Entero;
         #endregion
         
         #region float
         case "float":
-          return Regreso.Flotante;
+          return TipoDato.Flotante;
         #endregion
         
         #region double
         case "double":
-          return Regreso.Doble;
+          return TipoDato.Doble;
         #endregion
 
         #region bool
         case "bool":
-          return Regreso.Booleano;
+          return TipoDato.Booleano;
         #endregion
         
         #region void
         case "void":
-          return Regreso.Vacio;
+          return TipoDato.Vacio;
         #endregion
 
         default:
-          return new Regreso();
+          return new TipoDato();
       }
     }
 
@@ -150,11 +150,12 @@ namespace Compilador_CSharp
 
       NodoClase clase_anterior = new NodoClase();
       NodoMetodo metodo_anterior = new NodoMetodo();
+      ListaErroresSemanticos errores_semanticos;
       
       //Variables para llenar nodos.
       string lexema = "";
       Alcance alcance = Alcance.publico;
-			Regreso regreso = new Regreso();
+			TipoDato regreso = new TipoDato();
 			TipoDato tipo_dato = new TipoDato();
 
       //Variables auxiliares
@@ -191,16 +192,22 @@ namespace Compilador_CSharp
 							if (lexema == clase_anterior.lexema)
 							{
 								// El metodo se llama igual que la clase en la que esta.
-								MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: El metodo se llama igual que la clase en la que esta", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("El metodo se llama igual que la clase en la que esta", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
 							}
 							else if (tabla_simbolos.ExisteMetodo(lexema, parametros, clase_anterior))
 							{
 								// Ya existe un metodo igual.
-								MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un metodo igual", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("Ya existe un metodo igual", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
 							}
 							else if (tabla_simbolos.ExisteAtributo(lexema, clase_anterior) && ambito == 2) {
 								// Ya existe un atributo que se llama igual.
-								MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un atributo que se llama igual", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("Ya existe un atributo que se llama igual", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
 							}
 							else
 							{
@@ -239,20 +246,28 @@ namespace Compilador_CSharp
               if (lexema == clase_anterior.lexema)
               {
                 // El atributo se llama igual que la clase en la que esta.
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: El atributo se llama igual que la clase en la que esta", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("El atributo se llama igual que la clase en la que esta", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
               }
               else if (tabla_simbolos.ExisteAtributo(lexema, clase_anterior) && ambito == 2)
               {
                 // Ya existe un atributo que se llama igual.
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un atributo que se llama igual", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("Ya existe un atributo que se llama igual", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
               }
               else if (tabla_simbolos.ExisteMetodo(lexema, clase_anterior) && ambito >= 2) {
 								// Ya existe un atributo que se llama igual.
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe un metodo que se llama igual", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("Ya existe un metodo que se llama igual", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
 							}
 							else if (tabla_simbolos.ExisteVariable(lexema, metodo_anterior) && ambito == 3) {
 								// Ya existe un atributo que se llama igual.
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe una variable local que se llama igual", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("Ya existe una variable local que se llama igual", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
 							}
 							else
               {
@@ -283,7 +298,9 @@ namespace Compilador_CSharp
 						// Expresiones con variables
 						else {
 							if (!tabla_simbolos.ExisteVariable(lexema, metodo_anterior) && ambito == 3) {
-                MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: No existe una variable local con ese nombre", "Error!");
+                errores_semanticos = new ListaErroresSemanticos("No existe una variable local con ese nombre", lista[i].NumeroLinea);
+                tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                errores_semanticos = null;
 							}
 						}
 					}
@@ -315,7 +332,9 @@ namespace Compilador_CSharp
             if (tabla_simbolos.ExisteClase(lexema))
             {
               // Error, la clase ya existe
-              MessageBox.Show("Error en la linea "+lista[i].NumeroLinea+"\nMensaje de error: Ya existe una clase declarada con ese nombre", "Error!");
+              errores_semanticos = new ListaErroresSemanticos("Ya existe una clase declarada con ese nombre", lista[i].NumeroLinea);
+              tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+              errores_semanticos = null;
               break;
             }
             else
@@ -331,7 +350,9 @@ namespace Compilador_CSharp
                 }
                 else
                 {
-                  MessageBox.Show("Error en linea "+lista[i].NumeroLinea+"\nMensaje de error: No existe la clase a heredar", "Error!");
+                  errores_semanticos = new ListaErroresSemanticos("No existe la clase a heredar", lista[i].NumeroLinea);
+                  tabla_simbolos.lista_errores_semanticos.Add(errores_semanticos);
+                  errores_semanticos = null;
                   break;
                 }
               }
