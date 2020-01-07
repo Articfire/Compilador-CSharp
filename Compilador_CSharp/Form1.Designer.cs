@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tabla = new System.Windows.Forms.DataGridView();
             this.compilar_btn = new System.Windows.Forms.Button();
             this.codigoTexto_txb = new System.Windows.Forms.TextBox();
@@ -39,14 +39,14 @@
             // tabla
             // 
             this.tabla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.tabla.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.tabla.DefaultCellStyle = dataGridViewCellStyle2;
             this.tabla.Location = new System.Drawing.Point(466, 12);
             this.tabla.Name = "tabla";
             this.tabla.RowTemplate.ReadOnly = true;
@@ -74,8 +74,8 @@
             this.codigoTexto_txb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.codigoTexto_txb.Size = new System.Drawing.Size(448, 484);
             this.codigoTexto_txb.TabIndex = 1;
-            this.codigoTexto_txb.Text = "namespace Martin {\r\n  public class Humano {\r\n    int x = 1 + 2;\r\n    int y = x + " +
-    "10;\r\n    int r = x - 10;\r\n  }";
+            this.codigoTexto_txb.Text = "namespace Martin {\r\n  public class Humano {\r\n    int suma = 1 + 2;\r\n    int rest " +
+    "= suma - 10;\r\n    int mult = suma * 10;\r\n    int div = 1/1;\r\n  }";
             // 
             // infoSelector
             // 
@@ -85,7 +85,8 @@
             this.infoSelector.FormattingEnabled = true;
             this.infoSelector.Items.AddRange(new object[] {
             "Lista de Tokens",
-            "Errores de TS"});
+            "Errores de TS",
+            "Recorrido Postorden"});
             this.infoSelector.Location = new System.Drawing.Point(466, 426);
             this.infoSelector.Name = "infoSelector";
             this.infoSelector.Size = new System.Drawing.Size(444, 25);

@@ -34,88 +34,36 @@ namespace Compilador_CSharp
     public class ArbolSintactico
     {
         #region Propiedades del Arbol
+        public static Nodo Arbol = new Nodo();
         int puntero = 0;
         public string codigo_p = "";
-        
-        ListaToken TokenActual;
-        List<ListaToken> miListaTokens;
+
         TablaSimbolos miTablaSimbolos;
+        List<ListaToken> miListaTokens;
+        ListaToken TokenActual;
         #endregion
         
-        public static Nodo Arbol = new Nodo();
-
-        #region Metodos para Generar y Recorrer el Arbol
-        public Nodo GenerarArbol(List<ListaToken> lista, TablaSimbolos tabla)
-        {
-            miListaTokens = lista;
-            miTablaSimbolos = tabla;
-            Arbol = GenerarSentencias();
-            return Arbol;
-        }
-        
-        public void ObtenerSiguienteToken()
-        {
-            puntero++;
-            if (puntero < miListaTokens.Count)
-            {
-                TokenActual = miListaTokens[puntero];
-            }
-
-        }
-        
-        public Nodo GenerarSentencias()
+        #region Metodos para Crear Nodos
+        public Nodo NuevoNodoExpresion()
         {
             Nodo t = new Nodo();
-            if (puntero < miListaTokens.Count)
-            {
-                if (miListaTokens[puntero].Token == 100 && miListaTokens[puntero + 1].Lexema == "=")
-                {
-                    codigo_p += "lda " + miListaTokens[puntero].Lexema + "\r\n";
-                    t = Asignacion();
-
-                }
-                else
-                {
-                    ObtenerSiguienteToken();
-                    t = GenerarSentencias();
-                }
-
-            }
-            GenerarCodigoP(codigo_p);
+            t.hijoDerecho = new Nodo();
+            t.hijoIzquierdo = new Nodo();
+            t.miTipoExpresion = tipoExpresion.Vacio;
+            t.miTipoSentencia = tipoSentencia.Vacio;
             return t;
         }
-        
-        public void GenerarCodigoP(string codigop)
+
+        public Nodo NuevoNodoSentencia()
         {
-            string ubicacion = @"C:\Users\Marti\OneDrive\Escritorio\CodigoP.txt";
-            File.WriteAllText(ubicacion, codigop);
-        }
-
-        public void RecorridoPostOrden(Nodo miArbol)
-        {
-            if (miArbol.hijoIzquierdo != null)
-            {
-                RecorridoPostOrden(miArbol.hijoIzquierdo);
-            }
-
-            if (miArbol.hijoCentro != null)
-            {
-                RecorridoPostOrden(miArbol.hijoCentro);
-            }
-
-            if (miArbol.hijoDerecho != null)
-            {
-                RecorridoPostOrden(miArbol.hijoDerecho);
-            }
-
-            if (miArbol.lexema != null)
-            {
-                MessageBox.Show(miArbol.lexema);
-                if (miArbol.Hermano != null)
-                {
-                    RecorridoPostOrden(miArbol.Hermano);
-                }
-            }
+            Nodo t = new Nodo();
+            t.Hermano = new Nodo();
+            t.hijoIzquierdo = new Nodo();
+            t.hijoCentro = new Nodo();
+            t.hijoDerecho = new Nodo();
+            t.miTipoExpresion = tipoExpresion.Vacio;
+            t.miTipoSentencia = tipoSentencia.Vacio;
+            return t;
         }
         #endregion
 
@@ -181,12 +129,12 @@ namespace Compilador_CSharp
                 lexema_anterior = miListaTokens[puntero].Lexema;
                 ObtenerSiguienteToken();
                 t.hijoDerecho = Factor();
-                if (miListaTokens[puntero].Lexema == "*")
+                if (lexema_anterior == "*")
                 {
                     codigo_p += "mpi " + "\r\n";
                     t.miTipoOperacion = tipoOperacion.Multiplicacion;
                 }
-                else if (miListaTokens[puntero].Lexema == "/")
+                else if (lexema_anterior == "/")
                 {
                     codigo_p += "div " + "\r\n";
                     t.miTipoOperacion = tipoOperacion.Division;
@@ -228,27 +176,96 @@ namespace Compilador_CSharp
         }
         #endregion
 
-        #region Metodos para Crear Nodos
-        public Nodo NuevoNodoExpresion()
+        #region Comprobacion de Tipos
+        public TipoDato Inferencia(tipoOperacion op, TipoDato factor1, TipoDato factor2)
+        {
+            switch (op)
+            {
+                case tipoOperacion.Suma:
+                    break;
+                case tipoOperacion.Resta:
+                    break;
+                case tipoOperacion.Multiplicacion:
+                    break;
+                case tipoOperacion.Division:
+                    break;
+            }
+            return TipoDato.Flotante; // Placeholder
+        }
+        #endregion
+
+        #region Otros Metodos de Arboles
+        public Nodo GenerarArbol(List<ListaToken> lista, TablaSimbolos tabla)
+        {
+            miListaTokens = lista;
+            miTablaSimbolos = tabla;
+            Arbol = GenerarSentencias();
+            return Arbol;
+        }
+
+        public void ObtenerSiguienteToken()
+        {
+            puntero++;
+            if (puntero < miListaTokens.Count)
+            {
+                TokenActual = miListaTokens[puntero];
+            }
+
+        }
+
+        public Nodo GenerarSentencias()
         {
             Nodo t = new Nodo();
-            t.hijoDerecho = new Nodo();
-            t.hijoIzquierdo = new Nodo();
-            t.miTipoExpresion = tipoExpresion.Vacio;
-            t.miTipoSentencia = tipoSentencia.Vacio;
+            if (puntero < miListaTokens.Count)
+            {
+                if (miListaTokens[puntero].Token == 100 && miListaTokens[puntero + 1].Lexema == "=")
+                {
+                    codigo_p += "lda " + miListaTokens[puntero].Lexema + "\r\n";
+                    t = Asignacion();
+
+                }
+                else
+                {
+                    ObtenerSiguienteToken();
+                    t = GenerarSentencias();
+                }
+
+            }
+            GenerarCodigoP(codigo_p);
             return t;
         }
 
-        public Nodo NuevoNodoSentencia()
+        public void GenerarCodigoP(string codigop)
         {
-            Nodo t = new Nodo();
-            t.Hermano = new Nodo();
-            t.hijoIzquierdo = new Nodo();
-            t.hijoCentro = new Nodo();
-            t.hijoDerecho = new Nodo();
-            t.miTipoExpresion = tipoExpresion.Vacio;
-            t.miTipoSentencia = tipoSentencia.Vacio;
-            return t;
+            string ubicacion = @"C:\Users\Marti\OneDrive\Escritorio\CodigoP.txt";
+            File.WriteAllText(ubicacion, codigop);
+        }
+
+        public void RecorridoPostOrden(Nodo miArbol)
+        {
+            if (miArbol.hijoIzquierdo != null)
+            {
+                RecorridoPostOrden(miArbol.hijoIzquierdo);
+            }
+
+            if (miArbol.hijoCentro != null)
+            {
+                RecorridoPostOrden(miArbol.hijoCentro);
+            }
+
+            if (miArbol.hijoDerecho != null)
+            {
+                RecorridoPostOrden(miArbol.hijoDerecho);
+            }
+
+            if (miArbol.lexema != null)
+            {
+                MessageBox.Show(miArbol.lexema);
+                if (miArbol.Hermano != null)
+                {
+                    RecorridoPostOrden(miArbol.Hermano);
+                }
+            }
         }
         #endregion
     }
