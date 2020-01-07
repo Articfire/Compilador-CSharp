@@ -74,7 +74,8 @@
             this.codigoTexto_txb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.codigoTexto_txb.Size = new System.Drawing.Size(448, 484);
             this.codigoTexto_txb.TabIndex = 1;
-            this.codigoTexto_txb.Text = "namespace Martin{\r\npublic class Humano {\r\n  int x = 1;\r\n  int y = x + 10;\r\n}\r\n";
+            this.codigoTexto_txb.Text = "namespace Martin {\r\n  public class Humano {\r\n    int x = 1;\r\n    int y = Entero +" +
+    " 1;\r\n  }";
             // 
             // infoSelector
             // 
@@ -84,7 +85,6 @@
             this.infoSelector.FormattingEnabled = true;
             this.infoSelector.Items.AddRange(new object[] {
             "Lista de Tokens",
-            "Tabla de Simbolos",
             "Errores de TS"});
             this.infoSelector.Location = new System.Drawing.Point(466, 426);
             this.infoSelector.Name = "infoSelector";

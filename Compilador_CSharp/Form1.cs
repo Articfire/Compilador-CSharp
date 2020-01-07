@@ -26,15 +26,11 @@ namespace Compilador_CSharp
 
             Lexico lexico = new Lexico(codigoFuente);
             tokens = lexico.AnalisisLexico();
+            tabla.DataSource = tokens;
 
             Sintactico sintactico = new Sintactico(tokens);
             tabla_simbolos = sintactico.AnalizadorSintactico();
 
-            NodoArbol arbol = new NodoArbol(tokens, tabla_simbolos);
-            arbol.GenerarArbol();
-
-
-            tabla.DataSource = tokens;
         }
 
         private void infoSelector_SelectedIndexChanged(object sender, EventArgs e)

@@ -66,7 +66,7 @@ namespace Compilador_CSharp
         Resta,
         Multiplicacion,
         Division,
-        Modulo,
+        // Modulo, No hay modulo en la matriz de transicion
         Vacio
     }
 }
