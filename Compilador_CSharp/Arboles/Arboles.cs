@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.IO;
@@ -31,12 +32,15 @@ namespace Compilador_CSharp
         #endregion
     }
 
+
     public class ArbolSintactico
     {
         #region Propiedades del Arbol
         public static Nodo Arbol = new Nodo();
         int puntero = 0;
         public string codigo_p = "";
+
+        public TipoDato tipo_expresion;
 
         TablaSimbolos miTablaSimbolos;
         List<ListaToken> miListaTokens;
@@ -108,6 +112,7 @@ namespace Compilador_CSharp
                     t.miTipoOperacion = tipoOperacion.Resta;
                     codigo_p += "sbi " + "\r\n";
                 }
+
             }
 
             return t;
@@ -162,14 +167,8 @@ namespace Compilador_CSharp
                 t.lexema = TokenActual.Lexema;
                 t.miTipoExpresion = tipoExpresion.Constante;
                 codigo_p += "ldc " + TokenActual.Lexema + "\r\n";
-                if (TokenActual.Token == 101)
-                {
-                    t.miTipoValor = TipoDato.Entero;
-                }
-                else if (TokenActual.Token == 102)
-                {
-                    t.miTipoValor = TipoDato.Flotante;
-                }
+
+                t.miTipoValor = TokenActual.Token == 101 ? TipoDato.Entero : TipoDato.Flotante;
                 ObtenerSiguienteToken();
             }
             return t;
@@ -177,20 +176,53 @@ namespace Compilador_CSharp
         #endregion
 
         #region Comprobacion de Tipos
-        public TipoDato Inferencia(tipoOperacion op, TipoDato factor1, TipoDato factor2)
+        public TipoDato FuncionEquivalencia(TipoDato factor1, TipoDato factor2, tipoOperacion op)
         {
             switch (op)
             {
                 case tipoOperacion.Suma:
-                    break;
-                case tipoOperacion.Resta:
-                    break;
-                case tipoOperacion.Multiplicacion:
-                    break;
-                case tipoOperacion.Division:
-                    break;
+                    if (factor1 == TipoDato.Entero &&
+                         factor2 == TipoDato.Entero)
+                        return TipoDato.Entero;
+                    else if (factor1 == TipoDato.Entero &&
+                         factor2 == TipoDato.Flotante)
+                        return TipoDato.Flotante;
+                    else
+                        throw new Exception(string.Format("Error de tipos no se puede realizar la operacion {0} con {1} y {2}",
+                            op, factor1, factor2));
+
             }
-            return TipoDato.Flotante; // Placeholder
+            return TipoDato.Vacio;
+
+        }
+
+        private TipoDato VerificacionTipos(Nodo miArbol)
+        {
+            if (miArbol.hijoIzquierdo != null)
+                miArbol.tipoValorHijoIzquierdo =
+                     VerificacionTipos(miArbol.hijoIzquierdo);
+
+            if (miArbol.hijoDerecho != null)
+                miArbol.tipoValorHijoDerecho =
+                    VerificacionTipos(miArbol.hijoDerecho);
+
+            if (miArbol.miTipoExpresion == tipoExpresion.Aritmetica || 
+                miArbol.miTipoExpresion == tipoExpresion.Comparacion
+            )
+            {
+                return FuncionEquivalencia(miArbol.tipoValorHijoIzquierdo,
+                     miArbol.tipoValorHijoDerecho, miArbol.miTipoOperacion);
+            }
+            else if (miArbol.miTipoExpresion == tipoExpresion.Constante)
+            {
+                return miArbol.miTipoValor;
+            }
+            else if (miArbol.miTipoExpresion == tipoExpresion.Identificador)
+            {
+                return miTablaSimbolos.ObtenerTipoDato(miArbol.lexema);
+            }
+
+            return TipoDato.Vacio;
         }
         #endregion
 
@@ -200,7 +232,18 @@ namespace Compilador_CSharp
             miListaTokens = lista;
             miTablaSimbolos = tabla;
             Arbol = GenerarSentencias();
+            try
+            {
+                var tipo = FuncionEquivalencia(Arbol.hijoIzquierdo.miTipoValor, Arbol.hijoDerecho.miTipoValor, Arbol.miTipoOperacion);
+                MessageBox.Show(tipo.ToString());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
             return Arbol;
+
+            // Comprobacion de Tipos
         }
 
         public void ObtenerSiguienteToken()

@@ -33,7 +33,8 @@ namespace Compilador_CSharp
 
             ArbolSintactico arbol_sintactico = new ArbolSintactico();
             Nodo nodo = arbol_sintactico.GenerarArbol(tokens, tabla_simbolos);
-            arbol_sintactico.RecorridoPostOrden(nodo);
+            // arbol_sintactico.RecorridoPostOrden(nodo);
+
         }
 
         private void infoSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -54,6 +55,11 @@ namespace Compilador_CSharp
         private void infoSelector_Click(object sender, EventArgs e)
         {
             infoSelector.DroppedDown = true;
+        }
+
+        private void codigoTexto_txb_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
